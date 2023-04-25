@@ -2,26 +2,39 @@
 #define Door5_h
 #include <Servo.h>
 #include <Ultrasonic.h>
-static const int servoPin5 = 36;
+static const int servoPin5 = 26;
 Servo servo5;
-Ultrasonic ultrasonic5(22, 23);
+Ultrasonic ultrasonic5(25, 33);
 static int d5, pos5;
-void OpenDoor(int );
-void CloseDoor(int );
+void OpenDoor5();
+void CloseDoor5();
 
 void Door5(void *parameter){
   for(;;){
   d5 = ultrasonic5.read();
   if(d5<=10 && pos5<= 50){
-    OpenDoor(pos5);
+    OpenDoor5();
     pos5 = 180;
   }
   vTaskDelay(300 / portTICK_PERIOD_MS);
   if(d5>10 && pos5>150){
-    CloseDoor(pos5);
+    CloseDoor5();
     pos5 = 0;
   }
   }
+}
+
+void OpenDoor5(){
+  for(pos5 = 0; pos5 <= 180; pos5++) {
+        servo5.write(pos5);
+        vTaskDelay(15 / portTICK_PERIOD_MS);
+    }
+}
+void CloseDoor5(){
+  for(pos5 = 180; pos5 >= 0; pos5--) {
+        servo5.write(pos5);
+        vTaskDelay(15 / portTICK_PERIOD_MS);
+    }
 }
 
 #endif
